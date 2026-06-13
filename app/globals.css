@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --batik-brown: #5c3317;
+    --batik-gold: #c9961a;
+    --batik-cream: #fdf6e3;
+    --batik-dark: #2d1b0e;
+    --batik-copper: #a0522d;
+    --batik-warm: #8b4513;
+    --batik-light: #f5e6c8;
+    --batik-muted: #d4a96a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--batik-cream);
+    color: var(--batik-dark);
+    font-family:
+        system-ui,
+        -apple-system,
+        sans-serif;
+}
+
+/* React Flow custom styles */
+.react-flow__node {
+    cursor: pointer;
+}
+
+.react-flow__edge-path {
+    stroke: var(--batik-gold) !important;
+    stroke-width: 2 !important;
+}
+
+.react-flow__edge.marriage .react-flow__edge-path {
+    stroke: var(--batik-copper) !important;
+    stroke-dasharray: 5, 3;
+}
+
+.react-flow__controls {
+    background: var(--batik-cream) !important;
+    border: 1px solid var(--batik-gold) !important;
+    border-radius: 8px !important;
+}
+
+.react-flow__controls-button {
+    background: var(--batik-cream) !important;
+    border-bottom: 1px solid var(--batik-light) !important;
+    color: var(--batik-brown) !important;
+}
+
+.react-flow__controls-button:hover {
+    background: var(--batik-light) !important;
+}
+
+.react-flow__minimap {
+    background: var(--batik-light) !important;
+    border: 1px solid var(--batik-gold) !important;
+    border-radius: 8px !important;
+}
+
+.react-flow__background {
+    background-color: var(--batik-cream) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--batik-light);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--batik-muted);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--batik-gold);
+}
+
+/* ── Print styles ──────────────────────────────────────────────────────────── */
+@media print {
+    /* Sembunyikan semua kecuali kanvas pohon */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Tampilkan hanya area pohon */
+    .react-flow,
+    .react-flow * {
+        visibility: visible;
+    }
+
+    .react-flow {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #fdf6e3 !important;
+    }
+
+    /* Sembunyikan kontrol UI React Flow */
+    .react-flow__controls,
+    .react-flow__minimap,
+    .react-flow__attribution {
+        display: none !important;
+    }
+
+    /* Header cetak */
+    body.printing::before {
+        content: "🌳 Pohon Keluarga";
+        visibility: visible;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #5c3317;
+        color: #fdf6e3;
+        text-align: center;
+        padding: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 9999;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--batik-light) 25%,
+        var(--batik-cream) 50%,
+        var(--batik-light) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
