@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { supabase } from "@/lib/supabase";
 import {
   Mail,
@@ -28,18 +28,46 @@ const ERROR_MESSAGES: Record<
   },
 };
 
+function ErrorBanner() {
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
+  const errorInfo = errorParam ? ERROR_MESSAGES[errorParam] : null;
+
+  if (!errorInfo) return null;
+
+  return (
+    <div
+      className={`flex items-start gap-3 rounded-xl p-3 mb-4 text-sm border ${
+        errorParam === "no_access"
+          ? "bg-red-50 border-red-200 text-red-800"
+          : "bg-amber-50 border-amber-200 text-amber-800"
+      }`}
+    >
+      <span className="flex-shrink-0 mt-0.5">{errorInfo.icon}</span>
+      <div>
+        <p className="font-semibold">{errorInfo.title}</p>
+        <p className="text-xs mt-0.5 opacity-80">{errorInfo.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function LoginErrorDisplay() {
+  return (
+    <Suspense>
+      <ErrorBanner />
+    </Suspense>
+  );
+}
+
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(true);
-
-  const errorParam = searchParams.get("error");
-  const errorInfo = errorParam ? ERROR_MESSAGES[errorParam] : null;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -124,22 +152,7 @@ export default function LoginPage() {
           </div>
 
           {/* Error banner dari callback */}
-          {errorInfo && (
-            <div
-              className={`flex items-start gap-3 rounded-xl p-3 mb-4 text-sm border
-              ${
-                errorParam === "no_access"
-                  ? "bg-red-50 border-red-200 text-red-800"
-                  : "bg-amber-50 border-amber-200 text-amber-800"
-              }`}
-            >
-              <span className="flex-shrink-0 mt-0.5">{errorInfo.icon}</span>
-              <div>
-                <p className="font-semibold">{errorInfo.title}</p>
-                <p className="text-xs mt-0.5 opacity-80">{errorInfo.desc}</p>
-              </div>
-            </div>
-          )}
+          <LoginErrorDisplay />
 
           <div className="p-6">
             {sent ? (
