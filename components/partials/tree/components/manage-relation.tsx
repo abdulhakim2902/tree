@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import type { FamilyMember, FamilyRelation, RelationType } from "@/types";
-import { createRelation, deleteRelation } from "@/lib/family";
+import { createRelation, deleteRelation } from "@/lib/api/family";
 
 // ── Types & constants ─────────────────────────────────────────────────────────
 const RELATION_LABEL: Record<RelationType, string> = {

@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMyRole, type UserRole } from "@/lib/roles";
+import { getMyRole } from "@/lib/api/roles";
 import { useAuth } from "@/providers/auth-provider";
-interface UseRoleReturn {
-  role: UserRole | null;
+import { Role } from "@/types";
+
+interface UseRole {
+  role: Role | null;
   loading: boolean;
   isAdmin: boolean;
   isEditor: boolean;
@@ -12,9 +14,9 @@ interface UseRoleReturn {
   canEdit: boolean; // admin or editor
 }
 
-export function useRole(): UseRoleReturn {
+export function useRole(): UseRole {
   const { user } = useAuth();
-  const [role, setRole] = useState<UserRole | null>(null);
+  const [role, setRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

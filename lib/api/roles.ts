@@ -1,25 +1,15 @@
-import { supabase } from "./supabase";
-
-export type UserRole = "admin" | "editor" | "viewer";
-
-export interface UserRoleRecord {
-  id: string;
-  email: string;
-  role: UserRole;
-  invited_by: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { Role, UserRole } from "@/types";
+import { supabase } from "../supabase";
 
 // ── Get current user's role ───────────────────────────────────────────────────
-export async function getMyRole(): Promise<UserRole | null> {
+export async function getMyRole(): Promise<Role | null> {
   const { data, error } = await supabase.rpc("get_my_role");
   if (error || !data) return null;
-  return data as UserRole;
+  return data as Role;
 }
 
 // ── Get all users (admin only) ────────────────────────────────────────────────
-export async function getAllUsers(): Promise<UserRoleRecord[]> {
+export async function getAllUsers(): Promise<UserRole[]> {
   const { data, error } = await supabase
     .from("user_roles")
     .select("*")
@@ -32,9 +22,9 @@ export async function getAllUsers(): Promise<UserRoleRecord[]> {
 // ── Invite user (admin only) ──────────────────────────────────────────────────
 export async function inviteUser(
   email: string,
-  role: UserRole,
+  role: Role,
   invitedBy: string,
-): Promise<UserRoleRecord> {
+): Promise<UserRole> {
   // 1. Simpan role di tabel
   const { data, error } = await supabase
     .from("user_roles")
@@ -58,10 +48,7 @@ export async function inviteUser(
 }
 
 // ── Update role (admin only) ──────────────────────────────────────────────────
-export async function updateUserRole(
-  id: string,
-  role: UserRole,
-): Promise<void> {
+export async function updateUserRole(id: string, role: Role): Promise<void> {
   const { error } = await supabase
     .from("user_roles")
     .update({ role })

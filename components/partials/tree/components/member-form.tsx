@@ -16,7 +16,7 @@ import {
   Image,
 } from "lucide-react";
 import type { FamilyMember } from "@/types";
-import { createMember, updateMember } from "@/lib/family";
+import { createMember, updateMember } from "@/lib/api/family";
 
 // ── Zod Schema ────────────────────────────────────────────────────────────────
 const memberSchema = z.object({

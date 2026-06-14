@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Link, Loader, ArrowRight } from "lucide-react";
 import type { FamilyMember, FamilyRelation, RelationType } from "@/types";
-import { createRelation } from "@/lib/family";
+import { createRelation } from "@/lib/api/family";
 import { FC } from "react";
 
 // ── Zod Schema ────────────────────────────────────────────────────────────────

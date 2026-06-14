@@ -1,2 +1,2 @@
-export * from "./role";
 export * from "./family";
+export * from "./roles";
