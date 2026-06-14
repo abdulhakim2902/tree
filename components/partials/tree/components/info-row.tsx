@@ -1,13 +1,14 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 type InfoRowProps = {
   icon: React.ReactNode;
   label: string;
   value?: string | null;
+  action?: React.ReactNode;
 };
 
 export const InfoRow: FC<InfoRowProps> = (props) => {
-  const { icon, label, value } = props;
+  const { icon, label, value, action = null } = props;
 
   return (
     <div className="flex items-start gap-3 px-3 py-2.5">
@@ -18,6 +19,7 @@ export const InfoRow: FC<InfoRowProps> = (props) => {
           {value || "-"}
         </p>
       </div>
+      {action}
     </div>
   );
 };

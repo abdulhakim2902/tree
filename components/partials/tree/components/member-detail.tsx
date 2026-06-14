@@ -5,12 +5,14 @@ import {
   Pencil,
   Trash2,
   Building2,
+  Phone,
+  MessageCircle,
+  MapPin,
+  Map,
 } from "lucide-react";
 import type { FamilyMember, FamilyRelation } from "@/types";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { InfoRow } from "./info-row";
-import { PhoneRow } from "./phone-row";
-import { AddressRow } from "./address-row";
 
 interface MemberDetailProps {
   member: FamilyMember;
@@ -66,6 +68,23 @@ export const MemberDetail: FC<MemberDetailProps> = (props) => {
       rel.member_id === member.id ? rel.related_member_id : rel.member_id;
     return allMembers.find((m) => m.id === relatedId);
   };
+
+  const waUrl = useMemo(() => {
+    if (!member.phone) return null;
+
+    const digits = member.phone.replace(/\D/g, "");
+    if (digits.startsWith("0")) return "62" + digits.slice(1);
+    if (digits.startsWith("62")) return digits;
+    const phone = "62" + digits;
+
+    return `https://wa.me/${phone}?text=${encodeURIComponent("Halo! Selamat Lebaran 🌙 Mohon Maaf Lahir dan Batin 🙏")}`;
+  }, [member.phone]);
+
+  const mapsUrl = useMemo(() => {
+    return member.address
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.address)}`
+      : null;
+  }, [member.address]);
 
   return (
     <div className="h-full flex flex-col bg-batik-cream fade-in">
@@ -168,8 +187,44 @@ export const MemberDetail: FC<MemberDetailProps> = (props) => {
               label="Pekerjaan"
               value={member.job}
             />
-            <PhoneRow phone={member.phone} />
-            <AddressRow address={member.address} />
+            <InfoRow
+              icon={<Phone size={14} />}
+              label="Telepon"
+              value={member.phone}
+              action={
+                waUrl && (
+                  <a
+                    href={waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Kirim pesan WhatsApp"
+                    className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-500 hover:bg-green-600 text-white text-xs font-semibold transition-colors shadow-sm"
+                  >
+                    <MessageCircle size={13} />
+                    <span>Kirim Pesan</span>
+                  </a>
+                )
+              }
+            />
+            <InfoRow
+              icon={<MapPin size={14} />}
+              label="Alamat"
+              value={member.address}
+              action={
+                mapsUrl && (
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Buka di Google Maps"
+                    className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold transition-colors shadow-sm"
+                  >
+                    <Map size={13} />
+                    <span>Maps</span>
+                  </a>
+                )
+              }
+            />
           </div>
         </section>
 
